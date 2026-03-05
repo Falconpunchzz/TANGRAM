@@ -33,23 +33,39 @@
   <script src="./static/js/index.js"></script>
 
 <style>
-    .title-icon {
-      /* Increased height from 1em to 1.6em */
-      height: 1.6em; 
-      vertical-align: middle;
-      margin-right: 12px;
-      /* Adjusted bottom margin to keep it centered with the larger size */
-      margin-bottom: 0.2em; 
-    }
+  .title-icon {
+    /* Large icon size */
+    height: 1.6em; 
+    vertical-align: middle;
+    margin-right: 15px;
+    /* Adjust positioning for larger scale */
+    margin-bottom: 0.1em; 
+  }
 
-    /* Added flex properties to the title to ensure perfect alignment as the icon grows */
+  .publication-title {
+    /* Use flexbox to keep them on the same line */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Prevents the text from wrapping easily */
+    white-space: nowrap; 
+    
+    /* Slightly reduce font size if the title is too long for the screen */
+    font-size: 2.2rem !important; 
+  }
+
+  /* Responsive adjustment for mobile screens */
+  @media screen and (max-width: 768px) {
     .publication-title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
+      white-space: normal; /* Allow wrapping only on small mobile devices */
+      font-size: 1.8rem !important;
     }
-  </style>
+    .title-icon {
+      height: 1.3em;
+    }
+  }
+</style>
 </head>
 <body>
 
