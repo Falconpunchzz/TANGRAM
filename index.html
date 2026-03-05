@@ -32,12 +32,22 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 
-  <style>
+<style>
     .title-icon {
-      height: 1em; /* Matches the text height */
+      /* Increased height from 1em to 1.6em */
+      height: 1.6em; 
       vertical-align: middle;
-      margin-right: 10px;
-      margin-bottom: 0.15em; /* Fine-tune alignment */
+      margin-right: 12px;
+      /* Adjusted bottom margin to keep it centered with the larger size */
+      margin-bottom: 0.2em; 
+    }
+
+    /* Added flex properties to the title to ensure perfect alignment as the icon grows */
+    .publication-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
     }
   </style>
 </head>
