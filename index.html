@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="TANGRAM: Making Unstructured KV Cache Practical for Long-Term Conversation LLM Serving.">
+        [cite_start]content="TANGRAM: Making Unstructured KV Cache Practical for Long-Term Conversation LLM Serving[cite: 1].">
   <meta name="keywords" content="LLM, KV Cache, PagedAttention, Long-Term Conversation, GPU Memory Efficiency, TANGRAM">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TANGRAM: Making Unstructured KV Cache Practical for Long-Term Conversation LLM Serving</title>
@@ -31,6 +31,15 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+
+  <style>
+    .title-icon {
+      height: 1em; /* Matches the text height */
+      vertical-align: middle;
+      margin-right: 10px;
+      margin-bottom: 0.15em; /* Fine-tune alignment */
+    }
+  </style>
 </head>
 <body>
 
@@ -39,7 +48,10 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">TANGRAM: Making Unstructured KV Cache Practical for Long-Term Conversation LLM Serving</h1>
+          <h1 class="title is-1 publication-title">
+            <img src="./static/images/tangram_icon_v3.png" alt="TANGRAM Icon" class="title-icon">
+            TANGRAM: Making Unstructured KV Cache Practical for Long-Term Conversation LLM Serving
+          </h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="#">Hyungmin Kim</a><sup>*</sup>,</span>
@@ -86,13 +98,13 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            As Large Language Models (LLMs) evolve into persistent personal assistants, maintaining Long-Term Conversation (LTC) is critical for personalized user experiences[cite: 7]. However, preserving extensive history causes the Key-Value (KV) cache to grow linearly, creating significant GPU memory and bandwidth pressure[cite: 8]. 
+            As Large Language Models (LLMs) evolve into persistent personal assistants, the ability to maintain <b>Long-Term Conversation (LTC)</b> is critical[cite: 7]. However, preserving this extensive history causes the Key-Value (KV) cache to scale linearly, imposing significant pressure on GPU memory[cite: 8].
           </p>
           <p>
-            While non-uniform KV cache compression preserves accuracy by using heterogeneous budgets, it disrupts the uniform memory layout of modern serving systems[cite: 10]. This leads to severe memory fragmentation under paged allocation, preventing theoretical savings from becoming actual memory reductions[cite: 11].
+            While non-uniform KV cache compression preserves accuracy, it disrupts the uniform memory layout relied upon by modern serving systems, leading to severe memory fragmentation[cite: 10, 11].
           </p>
           <p>
-            This paper presents <b>TANGRAM</b>, a novel serving system designed to make non-uniform KV caches practical[cite: 12]. TANGRAM addresses inefficiencies through three core techniques: (1) <b>Profile-Guided Fixed Allocation</b> to eliminate scheduling stalls[cite: 13]; (2) <b>Head-Grouped PagedAttention</b> to resolve fragmentation without metadata overhead [cite: 14]; and (3) <b>Ahead-of-Time (AOT) Load Balancing</b> to ensure uniform GPU utilization[cite: 15].
+            This paper presents <b>TANGRAM</b>, a novel LLM serving system[cite: 12]. TANGRAM addresses inefficiencies through three core techniques: (1) <b>Profile-Guided Fixed Allocation</b> to eliminate scheduling stalls[cite: 13]; (2) <b>Head-Grouped PagedAttention</b> to resolve memory fragmentation [cite: 14]; and (3) <b>Ahead-of-Time (AOT) Load Balancing</b> to ensure uniform GPU utilization[cite: 15].
           </p>
         </div>
       </div>
@@ -104,30 +116,32 @@
 
 <section class="section">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">System Features</h2>
+    <h2 class="title is-3 has-text-centered">Key Contributions</h2>
     <div class="columns is-centered">
       <div class="column">
         <div class="content">
-          <h3 class="title is-4">Eliminating Uncertainty</h3>
+          <h3 class="title is-4">Rethinking KV Stability</h3>
           <p>
-            TANGRAM identifies that head-wise importance patterns are stable and model-intrinsic[cite: 43]. <b>Profile-Guided Fixed Allocation</b> converts dynamic compression into a deterministic contract, allowing the scheduler to plan resources precisely and eliminate prefill stalls[cite: 303, 304].
+            We identify that unstructured retention patterns are model-intrinsic and stable[cite: 43]. TANGRAM leverages this to convert dynamic compression into a deterministic contract, eliminating scheduling uncertainty[cite: 44].
           </p>
         </div>
       </div>
       <div class="column">
-        <h3 class="title is-4">Resolving Fragmentation</h3>
+        <h3 class="title is-4">Head-Grouped PagedAttention</h3>
         <p>
-          By partitioning heads into distinct groups, <b>Head-Grouped PagedAttention</b> eliminates the "structural dead space" found in coarse-grained page tables[cite: 306]. A <b>Vectorized Block Table</b> ensures this efficiency doesn't create CPU bottlenecks[cite: 47, 48].
+          By decoupling the monolithic page table into localized head groups, we ensure that allocated memory pages align more closely with the practical needs of heterogeneous heads[cite: 45, 46].
         </p>
       </div>
     </div>
     
     <div class="columns is-centered">
-      <div class="column is-full-width has-text-centered">
-        <h3 class="title is-4">AOT Load Balancing</h3>
-        <p>
-          TANGRAM leverages static budget profiles to precompute an optimal <b>Workload Partition Map</b>[cite: 15, 69]. This ensures balanced execution across GPU SMs without the 15-20% latency penalty associated with runtime planning[cite: 70, 298].
-        </p>
+      <div class="column is-full-width">
+        <h3 class="title is-4 has-text-centered">AOT Load Balancing</h3>
+        <div class="content has-text-justified">
+          <p>
+            Leveraging static budgets, our offline partitioning algorithm generates a Workload Partition Map[cite: 69]. This eliminates prohibitive runtime planning costs while ensuring perfectly balanced execution across GPU SMs[cite: 70].
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -137,14 +151,9 @@
 
 <section class="section">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Evaluation Results</h2>
-    <div class="content">
-      <p>Our evaluation on multi-turn workloads demonstrates that TANGRAM provides significant gains over baselines like vLLM[cite: 16]:</p>
-      <ul>
-        <li><b>Throughput:</b> Up to 2x improvement at the same memory footprint[cite: 16, 782].</li>
-        <li><b>Efficiency:</b> Up to 9x improvement when combined with Unstructured KV Eviction[cite: 16, 783].</li>
-        <li><b>Accuracy:</b> Preserves conversational accuracy on par with dynamic methods[cite: 16, 692].</li>
-      </ul>
+    <h2 class="title is-3 has-text-centered">Performance Results</h2>
+    <div class="content has-text-centered">
+      <p>TANGRAM improves throughput by up to <b>2x</b> at the same memory footprint and up to <b>9x</b> when combined with Unstructured KV Eviction[cite: 16, 783].</p>
     </div>
   </div>
 </section>
@@ -152,10 +161,9 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{kim2026tangram,
+    <pre><code>@inproceedings{kim2026tangram,
   title={TANGRAM: Making Unstructured KV Cache Practical for Long-Term Conversation LLM Serving},
   author={Kim, Hyungmin and Kim, Minsoo and Choi, Jungwook},
-  journal={Hanyang University},
   year={2026}
 }</code></pre>
   </div>
@@ -168,7 +176,7 @@
         <div class="content">
           <p>
             Website adapted from the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies template</a>. 
-            TANGRAM icon and research content courtesy of the authors at Hanyang University.
+            All research content belongs to the TANGRAM authors at Hanyang University.
           </p>
         </div>
       </div>
